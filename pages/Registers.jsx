@@ -1,8 +1,6 @@
 
-
-// Import React
 import React, { useState } from 'react';
-// Import required components
+
 import {
     LayoutAnimation,
     StyleSheet,
@@ -12,14 +10,28 @@ import {
     UIManager,
     TouchableOpacity,
     Platform,
+    RefreshControl
 } from 'react-native';
 
+import { DATA } from '../DATA/DATA';
+
 import ExpandableComponent from '../components/ExpandableComponent';
-import CONTENT from '../DATA/DATA';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Registers = () => {
-    const [listDataSource, setListDataSource] = useState(CONTENT);
-    const [multiSelect, setMultiSelect] = useState(false);
+    const [listDataSource, setListDataSource] = useState(DATA);
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        setTimeout(() => {
+            setRefreshing(false);
+        }, 2000);
+    }, []);
+
 
     if (Platform.OS === 'android') {
         UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -28,37 +40,19 @@ const Registers = () => {
     const updateLayout = (index) => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
         const array = [...listDataSource];
-        if (multiSelect) {
-            // If multiple select is enabled
-            array[index]['isExpanded'] = !array[index]['isExpanded'];
-        } else {
-            // If single select is enabled
-            array.map((value, placeindex) =>
-                placeindex === index
-                    ? (array[placeindex]['isExpanded'] = !array[placeindex]['isExpanded'])
-                    : (array[placeindex]['isExpanded'] = false)
-            );
-        }
+        array[index]['isExpanded'] = !array[index]['isExpanded'];
         setListDataSource(array);
     };
 
     return (
         <View style={styles.container}>
             <View style={{ flexDirection: 'row', padding: 10 }}>
-                <Text style={styles.titleText}>Registros</Text>
-                <TouchableOpacity onPress={() => setMultiSelect(!multiSelect)}>
-                    <Text
-                        style={{
-                            textAlign: 'center',
-                            justifyContent: 'center',
-                        }}>
-                        {multiSelect
-                            ? 'Desabilitar múltipla \n seleção'
-                            : 'Habilitar múltipla \n seleção'}
-                    </Text>
-                </TouchableOpacity>
             </View>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
+            >
                 {listDataSource.map((item, key) => (
                     <ExpandableComponent
                         key={item.id}
@@ -78,10 +72,5 @@ export default Registers;
 const styles = StyleSheet.create({
     container: {
         flex: 7,
-    },
-    titleText: {
-        flex: 1,
-        fontSize: 22,
-        fontWeight: 'bold',
     }
 });

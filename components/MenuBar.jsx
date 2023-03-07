@@ -1,31 +1,37 @@
 
-
-// Import React
 import React, { useState } from 'react';
-// Import required components
+
 import {
-    LayoutAnimation,
     StyleSheet,
     View,
     Text,
     TouchableOpacity,
 } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const MenuBar = () => {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.menuBar}>
-            <TouchableOpacity style={styles.menuButtonContainer}>
+            <TouchableOpacity style={styles.menuButtonContainer}
+                onPress={() => navigation.navigate('Resumo')}
+            >
                 <Icon name="leaf" size={25} color="#000" />
                 <Text>Resumo</Text>
             </TouchableOpacity >
-            <TouchableOpacity style={styles.menuButtonContainer}>
+            <TouchableOpacity style={styles.menuButtonContainer}
+                onPress={() => navigation.navigate('Registros')}
+            >
                 <Icon name="home" size={25} color="#000" />
                 <Text>Registros</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuButtonContainer}>
+            <TouchableOpacity style={styles.menuButtonContainer}
+                onPress={() => navigation.navigate('Adicionar')}
+            >
                 <Icon name="plus" size={25} color="#000" />
                 <Text>Adicionar</Text>
             </TouchableOpacity>
@@ -51,3 +57,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#5E74CA',
     }
 });
+
