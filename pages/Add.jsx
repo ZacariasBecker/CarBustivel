@@ -14,33 +14,39 @@ import {
     Button,
 } from 'react-native';
 
-// isExpanded: false,
-// id: '1',
-// dateTime: new Date(),
-// pricePerLiter: '1,10',
-// liters: '10,00',
-// totalCost: '110,00',
-// km: '1111
 
 import { DATA, listCreate } from '../DATA/DATA';
 
-import { storeData, getData } from '../DATA/asyncDATA';
+import { storeData, getData, removeData, getAllKeys, clearAll, getAllData } from '../DATA/asyncDATA';
 
 const Add = () => {
     const [pricePerLiter, setPricePerLiter] = useState("");
     const [totalCost, setTotalCost] = useState("");
     const [km, setKm] = useState("");
+    const [liters, setLiters] = useState("");
 
     const addNewTexto = () => {
         listCreate('Salvar Teste');
     };
 
-    const escrever = () => {
-        storeData('hehe');
+    const escrever = async () => {
+        const dateTime = new Date();
+        setLiters(totalCost / pricePerLiter);
+
+        await storeData({
+            isExpanded: false,
+            id: '777',
+            dateTime: dateTime,
+            pricePerLiter: pricePerLiter,
+            liters: liters,
+            totalCost: totalCost,
+            km: km
+        });
     };
 
-    const ler = () => {
-        getData();
+    const ler = async () => {
+        const hehe = await getData();
+        alert(hehe.totalCost);
     };
 
     return (
@@ -68,8 +74,17 @@ const Add = () => {
             />
 
             <Button title='Salvar' onPress={addNewTexto} />
+            <Text>--------</Text>
             <Button title='ESCREVER' onPress={escrever} />
             <Button title='LER' onPress={ler} />
+            <Text>--------</Text>
+            <Button title='Todas as chaves' onPress={getAllKeys} />
+            <Text>--------</Text>
+            <Button title='Remove values' onPress={removeData} />
+            <Text>--------</Text>
+            <Button title='Clear all' onPress={clearAll} />
+            <Text>--------</Text>
+            <Button title='get all data' onPress={getAllData} />
         </View>
     );
 };

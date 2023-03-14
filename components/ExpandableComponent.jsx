@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import { averageConsuption, lastConsuption, penultimateConsuption, comsuptionComparation, kmSinceLastSupply, daysSinceLastSupply, liters } from './formula';
+
 const ExpandableComponent = ({ item, onClickFunction }) => {
   //Custom Component for the Expandable List
   const [layoutHeight, setLayoutHeight] = useState(0);
@@ -20,7 +22,7 @@ const ExpandableComponent = ({ item, onClickFunction }) => {
     }
   }, [item.isExpanded]);
 
-  const dateTime = `${item.dateTime.getDay()} / ${item.dateTime.getMonth() + 1}/ ${item.dateTime.getFullYear()}`;
+  const dateTime = `${item.dateTime.getDay()} - ${item.dateTime.getMonth()} - ${item.dateTime.getFullYear()}`;
 
   return (
     <View>
@@ -38,10 +40,14 @@ const ExpandableComponent = ({ item, onClickFunction }) => {
         }}>
         {/*Content under the header of the Expandable List Item*/}
         <Text>Data: {dateTime}</Text>
+        <Text>Valor Pago: R$ {item.totalCost}</Text>
         <Text>Preço por litro: R$ {item.pricePerLiter}</Text>
         <Text>Litros: {item.liters} L</Text>
-        <Text>Preço total: R$ {item.totalCost}</Text>
+        <Text>Comsumo: {item.averageComsuption}</Text>
+        <Text>Comparação de comsumo: {item.comsuptionComparation}</Text>
         <Text>Quilometragem: {item.km} km</Text>
+        <Text>Km's rodados: {item.kmTravelled} km</Text>
+        <Text>Dias rodados: {item.daysTravelled}</Text>
       </View>
     </View>
   );
